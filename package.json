@@ -1,0 +1,19 @@
+{
+  "name": "sti-frontend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NicoleSilfverling/sti-frontend.git"
+  },
+  "author": "Nicole Silfverling",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NicoleSilfverling/sti-frontend/issues"
+  },
+  "homepage": "https://github.com/NicoleSilfverling/sti-frontend#readme"
+}
