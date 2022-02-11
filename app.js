@@ -1,6 +1,6 @@
 //app.js 
 const express = require("express")
-var favicon = require('server-favicon')
+var favicon = require('serve-favicon')
 var path = require('path')
 const res = require("express/lib/response")
 
