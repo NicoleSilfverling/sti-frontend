@@ -16,9 +16,9 @@ h1{
     color:white;
 } 
 
-/* #canvas {
-     background: rgb(137, 255, 249);
+#canvas {
+     background-image: url(/public/images/bg2.png);
     border-radius: 5px; 
 }
-  */
+ 
 

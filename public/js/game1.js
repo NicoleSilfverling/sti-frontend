@@ -10,8 +10,11 @@ ctx.lineWidth = 3;
 const BG_IMG = new Image();
 BG_IMG.src = "public/images/bg2.png"
 
+
 //player lives
 let life = 3;
+let score = 0;
+const SCORE_UNIT = 10;
 
 //paddle
 const paddleWidth = 100;
@@ -35,6 +38,71 @@ const ball = {
     speed: 4,
     dx: 3 * (Math.random() * 2-1),
     dy: -3
+}
+
+// skapa bricks
+const brick = {
+    row: 3,
+    column: 5,
+    width: 55,
+    height: 20,
+    offSetLeft: 20,
+    offSetTop: 20,
+    marginTop: 25,
+    fillColor: '#0c1f4f',
+    strokeColor : "#0dfafa"
+}
+
+let bricks = [];
+
+function createBricks(){
+    for (let r = 0; r < brick.row; r++) {
+        bricks[r] = [];
+        for(let c = 0; c < brick.column; c++){
+            bricks[r][c] = {
+                x : c * (brick.width + brick.offSetLeft) + brick.offSetLeft,
+                y: r * (brick.height + brick.offSetTop) + brick.offSetTop + brick.marginTop,
+                status : true
+            }
+        }
+    }
+}
+createBricks();
+
+function drawBricks(){
+    for(let r = 0; r < brick.row; r++){
+        for(let c = 0; c < brick.column; c++){
+            let b = bricks[r][c];
+            if(b.status){
+                ctx.fillStyle = brick.fillColor;
+                ctx.fillRect(b.x, b.y, brick.width, brick.height);
+                
+                //glow
+                ctx.shadowColor = brick.strokeColor;
+                ctx.shadowOffsetX = 0;
+                ctx.shadowOffsetY = 0;
+                ctx.shadowBlur = 10; 
+
+                ctx.strokeStyle = brick.strokeColor;
+                ctx.strokeRect(b.x, b.y, brick.width, brick.height);
+            }
+        }
+    }
+}
+
+function ballBrickCollision(){
+    for(let r = 0; r < brick.row; r++){
+        for(let c = 0; c < brick.column; c++){
+            let b = bricks[r][c];
+            if(b.status){
+                if(ball.x + ball.radius > b.x && ball.x - ball.radius < b.x + brick.width && ball.y + ball.radius > b.y && ball.y - ball.radius < b.y + brick.height){
+                    ball.dy = - ball.dy;
+                    b.status = false; 
+                    score += SCORE_UNIT;
+                }
+            }
+        }
+    }
 }
 
 
@@ -124,7 +192,7 @@ function drawPaddle(){
 
     // test glow effekt, konstig linje under??
     // Color of the shadow;  RGB, RGBA, HSL, HEX, and other inputs are valid.
-    //ctx.shadowColor = '#ed27ec'; // string
+    ctx.shadowColor = '#ed27ec'; // string
     // Horizontal distance of the shadow, in relation to the text.
     ctx.shadowOffsetX = 0; // integer
     // Vertical distance of the shadow, in relation to the text.
@@ -151,6 +219,7 @@ function drawBall(){
 function draw(){
     drawPaddle();
     drawBall();
+    drawBricks();
 }
 function update(){
     movePaddle();
@@ -160,9 +229,13 @@ function update(){
 }
 
 function loop(){
-    ctx.drawImage (BG_IMG, 0,0);
+    // funkar ej, funkar i annat projekt??
+    //ctx.drawImage (BG_IMG, 0,0);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
     draw();
     update();
     requestAnimationFrame(loop);
 }
 loop();
+
