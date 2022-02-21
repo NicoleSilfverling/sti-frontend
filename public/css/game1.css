@@ -1,6 +1,6 @@
-* {
+ /* * {
     box-sizing: border-box;
-}
+} */
 
 body{
     background-color: #333;
@@ -14,13 +14,11 @@ body{
 }
 h1{
     color:white;
-}
+} 
 
-#canvas {
-    background: rgb(137, 255, 249);
-    border-radius: 5px;
+/* #canvas {
+     background: rgb(137, 255, 249);
+    border-radius: 5px; 
 }
+  */
 
-#source{
-    display: none;
-}
