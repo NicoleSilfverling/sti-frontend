@@ -8,13 +8,14 @@ canvas.style.border = "10px solid #0c1f4f";
 ctx.lineWidth = 3;
 
 const BG_IMG = new Image();
-BG_IMG.src = "public/images/bg2.png"
+BG_IMG.src = "/images/bg2.png"
 
 
-//player lives
 let life = 3;
 let score = 0;
 const SCORE_UNIT = 10;
+let GAME_OVER = false;
+let level = 1;
 
 //paddle
 const paddleWidth = 100;
@@ -104,13 +105,30 @@ function ballBrickCollision(){
         }
     }
 }
+const lifeImg = new Image();
+lifeImg.src = "/images/neon-heart.png";
+
+function gameStats(text, textX, textY, img, imgX, imgY){
+    ctx.fillStyle = '#FFF';
+    ctx.font = "25px Germania One";
+    ctx.fillText(text, textX, textY);
+    ctx.drawImage(img, imgX, imgY, 25, 25);
+}
+//gameStats(score, 35, 25, )
+
+function gameStatsText(text, textX, textY){
+    ctx.fillStyle = '#FFF';
+    ctx.font = "25px Germania One";
+    ctx.fillText(text, textX, textY);
+}
 
 
-// test move paddle 
+//move paddle
 var rightArrow = false;
 var leftArrow = false;
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
+document.addEventListener("mousemove", mouseMoveHandler, false);
 
 function keyDownHandler(e) {
     if(e.key == "Right" || e.key == "ArrowRight") {
@@ -129,7 +147,15 @@ function keyUpHandler(e) {
         leftArrow = false;
     }
 }
-// end test move paddle
+
+
+function mouseMoveHandler(e) {
+  var relativeX = e.clientX - canvas.offsetLeft;
+  if(relativeX > 0 && relativeX < canvas.width) {
+    paddle.x = relativeX - paddle.width/2;
+  }
+}
+
 
 function movePaddle(){
     if(rightArrow && paddle.x + paddle.width < canvas.width){
@@ -213,6 +239,7 @@ function drawBall(){
     ctx.strokeStyle = '#ed27ec';
     ctx.stroke();
     
+    
     ctx.closePath();
 }
 
@@ -220,22 +247,62 @@ function draw(){
     drawPaddle();
     drawBall();
     drawBricks();
+    gameStats(life, canvas.width -35, 25, lifeImg, canvas.width-65, 5);
+    //gameStatsText(life, canvas.width -35, 25);
+    gameStatsText(score +"p", 25, 25)
+    gameStatsText("lvl " + level, (canvas.width/2) -20 , 25)
 }
+
+function gameOver(){
+    if(life <= 0){
+        GAME_OVER = true;
+    }
+}
+
+function lvlUp(){
+    let isLvlCompleted = true;
+
+    for(let r = 0; r < brick.row; r++){
+        for(let c = 0; c < brick.column; c++){
+            isLvlCompleted = isLvlCompleted && !bricks[r][c].status;
+        }
+    }
+
+    if(isLvlCompleted){
+        
+        createBricks();
+        ball.speed += 1;
+        resetBall();
+        level++;
+    }
+
+}
+
 function update(){
     movePaddle();
     moveBall();
     ballWallCollision();
     ballPaddleCollision();
+    ballBrickCollision();
+    gameOver();
+    lvlUp();
+    
 }
 
 function loop(){
-    // funkar ej, funkar i annat projekt??
-    //ctx.drawImage (BG_IMG, 0,0);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // funkar ej, funkar i annat projekt?? BG från css funkar
+    ctx.drawImage (BG_IMG, 0,0);
+    //ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     draw();
     update();
-    requestAnimationFrame(loop);
+
+    if (!GAME_OVER) {
+        requestAnimationFrame(loop);
+    }
+
+    //requestAnimationFrame(loop);
+    
 }
 loop();
 
