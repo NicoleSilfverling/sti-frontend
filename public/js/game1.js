@@ -1,21 +1,29 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
-// ADD BORDER TO CANVAS
-canvas.style.border = "10px solid #0c1f4f";
 
-// MAKE LINE THIK WHEN DRAWING TO CANVAS
+canvas.style.border = "10px solid #0c1f4f";
 ctx.lineWidth = 3;
 
 const BG_IMG = new Image();
-BG_IMG.src = "/images/bg2.png"
+BG_IMG.src = "/images/bg3.png"
 
 
 let life = 3;
+let showHeart = false;
 let score = 0;
 const SCORE_UNIT = 10;
 let GAME_OVER = false;
 let level = 1;
+
+const heart = {
+    w: 30,
+    h: 30,
+    x: 20,
+    y: 0,
+    dx: 0,
+    dy: 1
+}
 
 //paddle
 const paddleWidth = 100;
@@ -36,22 +44,23 @@ const ball = {
     x: canvas.width/2,
     y: paddle.y - ballRadius,
     radius: ballRadius,
-    speed: 4,
+    speed: 5,
     dx: 3 * (Math.random() * 2-1),
     dy: -3
 }
 
 // skapa bricks
 const brick = {
-    row: 3,
+    row: 1,
     column: 5,
     width: 55,
     height: 20,
     offSetLeft: 20,
     offSetTop: 20,
-    marginTop: 25,
+    marginTop: 40,
     fillColor: '#0c1f4f',
-    strokeColor : "#0dfafa"
+    strokeColor : "#0dfafa",
+    strokeColor2: '#ed27ec'
 }
 
 let bricks = [];
@@ -75,17 +84,32 @@ function drawBricks(){
         for(let c = 0; c < brick.column; c++){
             let b = bricks[r][c];
             if(b.status){
+
+              
                 ctx.fillStyle = brick.fillColor;
                 ctx.fillRect(b.x, b.y, brick.width, brick.height);
                 
                 //glow
-                ctx.shadowColor = brick.strokeColor;
+                if(level%2 == 1){
+                    ctx.shadowColor = brick.strokeColor;
+                    ctx.shadowOffsetX = 0;
+                    ctx.shadowOffsetY = 0;
+                    ctx.shadowBlur = 10; 
+    
+                    ctx.strokeStyle = brick.strokeColor;
+
+                }else{
+
+                ctx.shadowColor = brick.strokeColor2;
                 ctx.shadowOffsetX = 0;
                 ctx.shadowOffsetY = 0;
                 ctx.shadowBlur = 10; 
 
-                ctx.strokeStyle = brick.strokeColor;
+                ctx.strokeStyle = brick.strokeColor2;
+                
+                }
                 ctx.strokeRect(b.x, b.y, brick.width, brick.height);
+
             }
         }
     }
@@ -120,6 +144,37 @@ function gameStatsText(text, textX, textY){
     ctx.fillStyle = '#FFF';
     ctx.font = "25px Germania One";
     ctx.fillText(text, textX, textY);
+}
+
+
+
+function drawExtraLife(){
+    if(showHeart){
+        ctx.drawImage(lifeImg, heart.x, heart.y, heart.w, heart.h);
+    }
+}
+function fallingHeart(){
+    if(score == 40 || score == 110 || score == 250 || score == 350 || showHeart == true){
+        showHeart = true;
+        drawExtraLife();
+        heart.y += heart.dy;
+    }
+    
+}
+
+function heartPaddleCollision(){
+    if(heart.y > paddle.y && heart.x > paddle.x && paddle.y < paddle.y + paddle.height && heart.x < paddle.x + paddle.width ){
+        if (life < 3){
+            showHeart = false;
+            life++;
+            heart.y = 0;
+        }
+    }
+
+    if(heart.y >= canvas.height){
+        showHeart = false;
+        heart.y = 0;
+    }
 }
 
 
@@ -175,7 +230,8 @@ function resetBall(){
     ball.x = canvas.width/2;
     ball.y = paddle.y - ballRadius;
     ball.dx = 3 * (Math.random() * 2-1);
-    ball.dy = -3;
+    //ball.dy = -3;
+    ball.dy = -ball.speed;
 }
 
 function ballWallCollision(){
@@ -249,8 +305,9 @@ function draw(){
     drawBricks();
     gameStats(life, canvas.width -35, 25, lifeImg, canvas.width-65, 5);
     //gameStatsText(life, canvas.width -35, 25);
-    gameStatsText(score +"p", 25, 25)
-    gameStatsText("lvl " + level, (canvas.width/2) -20 , 25)
+    gameStatsText(score +"p", 25, 25);
+    gameStatsText("lvl " + level, (canvas.width/2) -20 , 25);
+    drawExtraLife();
 }
 
 function gameOver(){
@@ -270,13 +327,18 @@ function lvlUp(){
 
     if(isLvlCompleted){
         
+        if (level < 4) {
+            brick.row++;
+        }
+
+
         createBricks();
-        ball.speed += 1;
+        ball.speed += 0.7;
         resetBall();
         level++;
     }
-
 }
+
 
 function update(){
     movePaddle();
@@ -284,6 +346,8 @@ function update(){
     ballWallCollision();
     ballPaddleCollision();
     ballBrickCollision();
+    heartPaddleCollision();
+    fallingHeart()
     gameOver();
     lvlUp();
     
