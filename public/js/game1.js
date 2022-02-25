@@ -8,9 +8,16 @@ ctx.lineWidth = 3;
 const BG_IMG = new Image();
 BG_IMG.src = "/images/bg3.png"
 
+const lifeImg = new Image();
+lifeImg.src = "/images/neon-heart.png";
+
+const coinImg = new Image();
+coinImg.src = "/images/coin.png";
+
 
 let life = 3;
 let showHeart = false;
+let showCoin = false;
 let score = 0;
 const SCORE_UNIT = 10;
 let GAME_OVER = false;
@@ -23,6 +30,15 @@ const heart = {
     y: 0,
     dx: 0,
     dy: 1
+}
+
+const coin = {
+    w: 30,
+    h: 30,
+    x: 250,
+    y: 0,
+    dx: 0,
+    dy: 1.5
 }
 
 //paddle
@@ -129,8 +145,7 @@ function ballBrickCollision(){
         }
     }
 }
-const lifeImg = new Image();
-lifeImg.src = "/images/neon-heart.png";
+
 
 function gameStats(text, textX, textY, img, imgX, imgY){
     ctx.fillStyle = '#FFF';
@@ -150,11 +165,12 @@ function gameStatsText(text, textX, textY){
 
 function drawExtraLife(){
     if(showHeart){
+        ctx.shadowBlur = 0; 
         ctx.drawImage(lifeImg, heart.x, heart.y, heart.w, heart.h);
     }
 }
 function fallingHeart(){
-    if(score == 40 || score == 110 || score == 250 || score == 350 || showHeart == true){
+    if(score == 40 || score == 100 ||score == 220 || score == 550 || score == 830 || score == 1100 ||  score == 1400|| showHeart == true){
         showHeart = true;
         drawExtraLife();
         heart.y += heart.dy;
@@ -168,12 +184,46 @@ function heartPaddleCollision(){
             showHeart = false;
             life++;
             heart.y = 0;
+            heart.x = Math.floor(Math.random() * canvas.width) + 1;
         }
     }
 
     if(heart.y >= canvas.height){
         showHeart = false;
         heart.y = 0;
+        heart.x = Math.floor(Math.random() * canvas.width) + 1;
+    }
+}
+
+//coin
+function drawCoin(){
+    if(showCoin){
+        ctx.shadowBlur = 5; 
+        ctx.shadowColor = 'yellow';
+        ctx.drawImage(coinImg, coin.x, coin.y, coin.w, coin.h);
+    }
+}
+function fallingCoin(){
+    if(score == 30 || score == 130 ||score == 270 || score == 520 || score == 800 || score == 1150 ||  score == 1450|| showCoin == true){
+        showCoin = true;
+        drawCoin();
+        coin.y += coin.dy;
+    }
+    
+}
+
+function coinPaddleCollision(){
+    if(coin.y > paddle.y && coin.x > paddle.x && paddle.y < paddle.y + paddle.height && coin.x < paddle.x + paddle.width ){ 
+        showCoin = false;
+        score += 30;
+        coin.y = 0;
+        coin.x = Math.floor(Math.random() * canvas.width) + 1;
+    }
+
+    if(coin.y >= canvas.height){
+        showCoin = false;
+        coin.y = 0;
+        coin.x = Math.floor(Math.random() * canvas.width) + 1;
     }
 }
 
@@ -272,7 +322,6 @@ function drawPaddle(){
     ctx.fillStyle = '#0c1f4f';
     ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height)
 
-    // test glow effekt, konstig linje under??
     // Color of the shadow;  RGB, RGBA, HSL, HEX, and other inputs are valid.
     ctx.shadowColor = '#ed27ec'; // string
     // Horizontal distance of the shadow, in relation to the text.
@@ -304,10 +353,10 @@ function draw(){
     drawBall();
     drawBricks();
     gameStats(life, canvas.width -35, 25, lifeImg, canvas.width-65, 5);
-    //gameStatsText(life, canvas.width -35, 25);
     gameStatsText(score +"p", 25, 25);
     gameStatsText("lvl " + level, (canvas.width/2) -20 , 25);
     drawExtraLife();
+    drawCoin();
 }
 
 function gameOver(){
@@ -347,14 +396,15 @@ function update(){
     ballPaddleCollision();
     ballBrickCollision();
     heartPaddleCollision();
+    coinPaddleCollision();
     fallingHeart()
+    fallingCoin();
     gameOver();
     lvlUp();
     
 }
 
 function loop(){
-    // funkar ej, funkar i annat projekt?? BG från css funkar
     ctx.drawImage (BG_IMG, 0,0);
     //ctx.clearRect(0, 0, canvas.width, canvas.height);
 
