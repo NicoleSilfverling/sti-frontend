@@ -41,24 +41,36 @@
         </div>
       </nav>
       
-        <div id="game">
-            <h1>Breakout</h1>
-            <canvas id="canvas" width="400" height="500"></canvas>
+      <div class="container">
+        <div class="row">
+          <div class="col-8">   
+            <div id="game">
+                <h1>Breakout</h1>
+                <canvas id="canvas" width="400" height="500"></canvas>
+                <div id="gameover">
+                  <img src="/images/gameover.png" id="gameoverpic" alt="">
+                </div>
+                <form id="myform">
+                  Your name:
+                      <input name="player_name" maxlength="20" class="formStyle" type="text" id="player_name" placeholder="Type Your Name" required>
+                      <br>Your score:
+                      <input name="player_score" class="formStyle" type="number" value=0 id="score" readonly></input><br>
+                      <button type="submit" class="formStyle" id="formButton">End Game</button>
+              </form>
+            </div>
+          </div>
+          <div class="col-4" id="highscore">
+            <h2>High scores</h2>
+            <div id="app"></div>
+          
+            </div>
+          </div>
         </div>
-        <!-- <div id="game">
-           
-            <div id="start" style="display:none">
-                <a href="#" onclick="startGame()">Start Game</a>
-            </div>
-            <div id="game-over" style="display:block">
-                <h1>Game Over</h1>
-                <a href="#" onclick="startGame()">Play Again?</a>
-            </div>
-            <canvas id="canvas" style="display:block"  width="400" height="500"></canvas> 
-        </div> -->
-      
-        
-        
+      </div>
+
+
+
+        <script src="/js/index.js"></script>
         <script src="/js/game1.js"></script>
       
       

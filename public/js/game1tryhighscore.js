@@ -353,8 +353,7 @@ function draw(){
     drawBall();
     drawBricks();
     gameStats(life, canvas.width -35, 25, lifeImg, canvas.width-65, 5);
-    //gameStatsText(score +"p", 25, 25);
-    gameStats(score +"p", 50, 25, coinImg, 20, 5);
+    gameStatsText(score +"p", 25, 25);
     gameStatsText("lvl " + level, (canvas.width/2) -20 , 25);
     drawExtraLife();
     drawCoin();
@@ -362,10 +361,9 @@ function draw(){
 
 function gameOver(){
     if(life <= 0){
-        showEndGame();
         GAME_OVER = true;
-        document.getElementById("score").value = score;
 
+        document.getElementById("score").value = score;
     }
 }
 
@@ -379,19 +377,15 @@ function lvlUp(){
     }
 
     if(isLvlCompleted){
-        
         if (level < 4) {
             brick.row++;
         }
-
-
         createBricks();
         ball.speed += 0.7;
         resetBall();
         level++;
     }
 }
-
 
 function update(){
     movePaddle();
@@ -425,11 +419,144 @@ function loop(){
 loop();
 
 
-const gameover = document.getElementById("gameover");
-const myform = document.getElementById("myform");
 
-function showEndGame(){
-    gameover.style.display = "block";
-    myform.style.display = "block";
 
+function get_scores(callback){
+    var xhr = new XMLHttpRequest()
+    xhr.open("GET", "http://localhost:3001/top5")
+
+    xhr.onload = function(){
+        var data = JSON.parse(this.response)
+        let scores = JSON.stringify(data);
+        console.log(scores);
+        callback(scores);
+    }
+    xhr.send()
 }
+
+// display highs core list
+const List = document.getElementById("highscores");
+
+var list_scores = function(scores) {
+    let object = JSON.parse(scores);
+
+      for (let i=0; i<object.length; i++) {
+        let li = document.createElement("LI");
+        let text = document.createTextNode(object[i].name + " ... " + object[i].score);
+        li.appendChild(text);
+        List.appendChild(li);
+   }
+}
+
+//reload hs when submitting form
+function resetForm(){
+    while(list.hasChildNodes()){
+        List.removeChild(List.firstChild);
+    }
+
+    //fetch data & make highscore
+    get_scores(list_scores);
+    //reset
+    document.getElementById("score").value = 0;
+    score = 0;
+}
+
+
+
+
+
+
+
+// const Errors = document.getElementById("error");
+
+// function get_scores(callback){
+//     let file = "/js/scores.json";
+//     fetch(file, {cache: 'no-cache'})
+//     .then(function(response){
+//         //if response is not ok
+//         if (response.status !== 200) {
+//             Errors.innerHTML = response.status;
+//         }
+//         // if response is ok
+//         response.json().then(function(data){
+//             let scores = JSON.stringify(data);
+//             console.log(scores);
+//             callback(scores);
+//         })
+//     })
+//     .catch(function(err) {
+//         Errors.innerHTML = err;
+//     })
+// }
+
+// // display highs core list
+// const List = document.getElementById("highscores");
+
+// var list_scores = function(scores) {
+//     let object = JSON.parse(scores);
+//     //lowest score saved for later
+//     let lowest_score = object[9].score;
+//     document.getElementById("lowscore").value = lowest_score;
+
+//       for (let i=0; i<object.length; i++) {
+//         // console.log(object[i]);
+//         let li = document.createElement("LI");
+//         let text = document.createTextNode(object[i].name + " ... " + object[i].score);
+//         li.appendChild(text);
+//         List.appendChild(li);
+
+//         if (i===0) {
+//         li.setAttribute('class',"top1");
+//         }
+//         if (i===1) {
+//         li.setAttribute('class',"top2");
+//         }
+//         if (i===2) {
+//         li.setAttribute('class',"top3");
+//     }
+//    }
+// }
+
+// //reload
+// function resetForm(){
+//     while(list.hasChildNodes()){
+//         List.removeChild(List.firstChild);
+//     }
+
+//     //fetch data & make highscore
+//     get_scores(list_scores);
+//     //reset
+//     document.getElementById("score").value = 0;
+//     score = 0;
+// }
+
+// //submit form
+// // listening for click submit button
+// myform.addEventListener("submit", function(event){
+//     //dont reload page
+//     event.preventDefault();
+
+//     //lowest highscore
+//     var tenth_score = document.getElementById("lowscore").value;
+    
+//     //Form Data Object
+//     var formData = new FormData(this);
+//     formData.append('score', score);
+
+//     // fetch request
+//     fetch ("/js/highscore.php", {
+//       method: "post",
+//       body: formData
+//     })
+//     .then (function (response){
+//       return response.text();
+//     })
+//     .then(function(text) {
+//       resetForm();
+//       console.log(text);
+//     })
+//     .catch(function (err) {
+//       errors.innerHTML = err;
+//     })
+
+// })
