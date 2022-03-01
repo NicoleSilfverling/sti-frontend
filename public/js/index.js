@@ -4,7 +4,7 @@ function age(){
     var xhr = new XMLHttpRequest()
     //xhr.open("GET", "http://localhost:3001/football");
    // xhr.open("GET", "http://localhost:3001/top5");
-    xhr.open("GET", "https:/nicole-backend.herokuapp.com/top5");
+    xhr.open("GET", "https://nicole-backend.herokuapp.com/top5");
 
     //xhr.open("GET", "/js/data.json")
     xhr.onload = function(){
