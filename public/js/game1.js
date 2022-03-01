@@ -444,10 +444,17 @@ loop();
 
 
 const gameover = document.getElementById("gameover");
+
 const myform = document.getElementById("myform");
+const myformObject = document.forms["myform"];
+let playerName = "";
 
 function showEndGame(){
     gameover.style.display = "block";
     myform.style.display = "block";
 
+}
+
+function getPlayerName(){
+    playerName = myformObject.elements["player_name"].value;
 }
