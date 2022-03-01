@@ -15,6 +15,10 @@ app.get('/', function (req, res){
     res.sendFile(__dirname + "/public/index.html")
 })
 
+app.get('/top5', function (req, res){
+    res.sendFile(__dirname + "/public/index.html")
+})
+
 app.listen(PORT, function(){
     console.log(`Server started in port ${PORT}`)
 })

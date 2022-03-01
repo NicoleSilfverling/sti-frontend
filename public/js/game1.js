@@ -18,6 +18,7 @@ coinImg.src = "/images/coin.png";
 let life = 3;
 let showHeart = false;
 let showCoin = false;
+let showPlusCoinText = false;
 let score = 0;
 const SCORE_UNIT = 10;
 let GAME_OVER = false;
@@ -214,16 +215,32 @@ function fallingCoin(){
 
 function coinPaddleCollision(){
     if(coin.y > paddle.y && coin.x > paddle.x && paddle.y < paddle.y + paddle.height && coin.x < paddle.x + paddle.width ){ 
+       
+        // for (let i = 0; i < 30; i++) {
+        //     setTimeout(function(){
+        //         score++;
+        //     }, 1000);         
+        // }
         showCoin = false;
         score += 30;
         coin.y = 0;
         coin.x = Math.floor(Math.random() * canvas.width) + 1;
+        showPlusCoinText = true;
     }
 
     if(coin.y >= canvas.height){
         showCoin = false;
         coin.y = 0;
         coin.x = Math.floor(Math.random() * canvas.width) + 1;
+    }
+}
+
+function drawPlusCoinText(){
+    if (showPlusCoinText) {
+        gameStatsText("+30", 50, 50);
+        setTimeout(function(){
+            showPlusCoinText = false;
+        }, 2000);
     }
 }
 
@@ -358,6 +375,7 @@ function draw(){
     gameStatsText("lvl " + level, (canvas.width/2) -20 , 25);
     drawExtraLife();
     drawCoin();
+    drawPlusCoinText();
 }
 
 function gameOver(){
