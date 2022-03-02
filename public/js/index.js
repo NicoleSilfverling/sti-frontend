@@ -8,8 +8,8 @@ setTimeout(age,UPDATE_FIRST)
 function age(){
     var xhr = new XMLHttpRequest()
     //xhr.open("GET", "http://localhost:3001/football");
-     xhr.open("GET", "http://localhost:3001/highscores");
-    //xhr.open("GET", "https://nicole-backend.herokuapp.com/highscores");
+    //xhr.open("GET", "http://localhost:3001/highscores");
+    xhr.open("GET", "https://nicole-backend.herokuapp.com/highscores");
 
     //xhr.open("GET", "/js/data.json")
     xhr.onload = function(){
