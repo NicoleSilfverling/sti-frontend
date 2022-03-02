@@ -19,6 +19,10 @@ app.get('/top5', function (req, res){
     res.sendFile(__dirname + "/public/index.html")
 })
 
+app.get('/registerscore', function (req, res){
+    res.sendFile(__dirname + "/public/html/game1.html")
+})
+
 app.listen(PORT, function(){
     console.log(`Server started in port ${PORT}`)
 })

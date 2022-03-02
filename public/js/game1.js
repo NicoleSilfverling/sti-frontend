@@ -455,6 +455,16 @@ function showEndGame(){
 
 }
 
-function getPlayerName(){
+function submitHighscore(){
     playerName = myformObject.elements["player_name"].value;
+    //let data = {"user": playerName, "score": score}
+    
+    let url ="http://localhost:3001/registerscore?user=" + playerName + "&score=" + score;
+    //console.log(myJSON);
+
+
+    var xhr = new XMLHttpRequest()
+     xhr.open("GET", url);
+
+    xhr.send()
 }
