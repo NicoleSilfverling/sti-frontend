@@ -154,7 +154,6 @@ function gameStats(text, textX, textY, img, imgX, imgY){
     ctx.fillText(text, textX, textY);
     ctx.drawImage(img, imgX, imgY, 25, 25);
 }
-//gameStats(score, 35, 25, )
 
 function gameStatsText(text, textX, textY){
     ctx.fillStyle = '#FFF';
@@ -215,12 +214,6 @@ function fallingCoin(){
 
 function coinPaddleCollision(){
     if(coin.y > paddle.y && coin.x > paddle.x && paddle.y < paddle.y + paddle.height && coin.x < paddle.x + paddle.width ){ 
-       
-        // for (let i = 0; i < 30; i++) {
-        //     setTimeout(function(){
-        //         score++;
-        //     }, 1000);         
-        // }
         showCoin = false;
         score += 30;
         coin.y = 0;
@@ -297,7 +290,6 @@ function resetBall(){
     ball.x = canvas.width/2;
     ball.y = paddle.y - ballRadius;
     ball.dx = 3 * (Math.random() * 2-1);
-    //ball.dy = -3;
     ball.dy = -ball.speed;
 }
 
@@ -339,14 +331,10 @@ function drawPaddle(){
     ctx.fillStyle = '#0c1f4f';
     ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height)
 
-    // Color of the shadow;  RGB, RGBA, HSL, HEX, and other inputs are valid.
-    ctx.shadowColor = '#ed27ec'; // string
-    // Horizontal distance of the shadow, in relation to the text.
-    ctx.shadowOffsetX = 0; // integer
-    // Vertical distance of the shadow, in relation to the text.
-    ctx.shadowOffsetY = 0; // integer
-    // Blurring effect to the shadow, the larger the value, the greater the blur.
-    ctx.shadowBlur = 10; // integer
+    ctx.shadowColor = '#ed27ec'; 
+    ctx.shadowOffsetX = 0; 
+    ctx.shadowOffsetY = 0; 
+    ctx.shadowBlur = 10; 
 
     ctx.lineWidth = 3;
     ctx.strokeStyle = '#ed27ec';
@@ -370,7 +358,6 @@ function draw(){
     drawBall();
     drawBricks();
     gameStats(life, canvas.width -35, 25, lifeImg, canvas.width-65, 5);
-    //gameStatsText(score +"p", 25, 25);
     gameStats(score +"p", 50, 25, coinImg, 20, 5);
     gameStatsText("lvl " + level, (canvas.width/2) -20 , 25);
     drawExtraLife();
@@ -436,9 +423,6 @@ function loop(){
     if (!GAME_OVER) {
         requestAnimationFrame(loop);
     }
-
-    //requestAnimationFrame(loop);
-    
 }
 loop();
 
@@ -459,8 +443,8 @@ function submitHighscore(){
     playerName = myformObject.elements["player_name"].value;
     //let data = {"user": playerName, "score": score}
     
-    //let url ="http://localhost:3001/registerscore?user=" + playerName + "&score=" + score;
-    let url ="https://nicole-backend.herokuapp.com/registerscore?user=" + playerName + "&score=" + score;
+    let url ="http://localhost:3001/registerscore?user=" + playerName + "&score=" + score;
+    //let url ="https://nicole-backend.herokuapp.com/registerscore?user=" + playerName + "&score=" + score;
 
     var xhr = new XMLHttpRequest()
      xhr.open("GET", url);
