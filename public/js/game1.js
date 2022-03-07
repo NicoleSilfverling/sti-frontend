@@ -441,10 +441,9 @@ function showEndGame(){
 
 function submitHighscore(){
     playerName = myformObject.elements["player_name"].value;
-    //let data = {"user": playerName, "score": score}
     
-    let url ="http://localhost:3001/registerscore?user=" + playerName + "&score=" + score;
-    //let url ="https://nicole-backend.herokuapp.com/registerscore?user=" + playerName + "&score=" + score;
+    //let url ="http://localhost:3001/registerscore?user=" + playerName + "&score=" + score;
+    let url ="https://nicole-backend.herokuapp.com/registerscore?user=" + playerName + "&score=" + score;
 
     var xhr = new XMLHttpRequest()
      xhr.open("GET", url);

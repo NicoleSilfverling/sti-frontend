@@ -3,18 +3,15 @@ const UPDATE_INTERVAL = 5000;
 
 setTimeout(age,UPDATE_FIRST)
 
-//age()
-
 function age(){
     var xhr = new XMLHttpRequest()
-    xhr.open("GET", "http://localhost:3001/highscores");
-    //xhr.open("GET", "https://nicole-backend.herokuapp.com/highscores");
+    //xhr.open("GET", "http://localhost:3001/highscores");
+    xhr.open("GET", "https://nicole-backend.herokuapp.com/highscores");
 
-    //xhr.open("GET", "/js/data.json")
     xhr.onload = function(){
         var data = JSON.parse(this.response)
         createTable(data)
-        //setTimeout(age,UPDATE_INTERVAL);
+        setTimeout(age,UPDATE_INTERVAL);
     }
     xhr.send()
 }
@@ -23,13 +20,15 @@ function age(){
 
 function createTable(data){
     var appElement = document.getElementById("app")
+    appElement.textContent = '';
+    
+
     var aTable = document.createElement("table")
     appElement.appendChild(aTable)
     
     for (let i = 0; i < 5; i++) {
         aTable.appendChild(createRow(data[i].user, data[i].score))  
-        console.log(data[i].user +" " + data[i].score)
-         
+        //console.log(data[i].user +" " + data[i].score)
     }
 }
 
