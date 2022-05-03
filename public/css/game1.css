@@ -9,6 +9,35 @@ body{
     overflow: hidden;
     color: #fff;
 }
+h1, h2{
+    color:white;
+} 
+
+.start{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+
+}
+.startgame{
+    border-radius: 10px;
+    border: solid 1.5px #fff;
+    font-size: 25px;
+    color: #fff;
+    padding: 0.5em;
+    background: transparent;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+.startgame:hover{
+    background-color: rgba(0, 0, 0, 0.242);
+}
+
+.welcome{
+    font-size: 4rem;
+}
 
 #game{
     
@@ -16,7 +45,7 @@ body{
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 90vh;
+    min-height: 100vh;
     margin: 0;
 }
 
@@ -57,9 +86,7 @@ body{
     margin: 0;
 }
 
-h1, h2{
-    color:white;
-} 
+
 
 
 
